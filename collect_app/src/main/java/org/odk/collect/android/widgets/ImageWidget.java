@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore.Images;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -92,6 +93,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                     }
                 } else {
                     i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
                     // We give the camera an absolute filename/path where to put the
                     // picture because of bug:
                     // http://code.google.com/p/android/issues/detail?id=1480
@@ -108,6 +110,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 try {
                     Collect.getInstance().getFormController().setIndexWaitingForData(
                             formEntryPrompt.getIndex());
+                    Log.d("Intent action: ", i.getAction());
                     ((Activity) getContext()).startActivityForResult(i,
                             FormEntryActivity.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
@@ -121,7 +124,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
         });
 
         chooseButton = getSimpleButton(getContext().getString(R.string.choose_image));
-        chooseButton.setEnabled(!prompt.isReadOnly());
+        chooseButton.setEnabled(false); //!prompt.isReadOnly()
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

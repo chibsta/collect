@@ -10,7 +10,7 @@
         <item name="android:textSize">21sp</item>
     </style>
 
-    <style name="MaterialDialogSheet" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="MaterialDialogSheet" parent="@style/Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
         <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
     </style>

@@ -35,6 +35,7 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -612,10 +613,12 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             return;
         }
 
+        //Log.d("Intent action: ", intent.getAction());
+        /*
         if (intent == null) {
             Timber.w("The intent has a null value for requestCode: " + requestCode);
             return;
-        }
+        } */
 
         // For handling results returned by the Zxing Barcode scanning library
         IntentResult barcodeScannerResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
@@ -673,13 +676,29 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
                  */
                 // The intent is empty, but we know we saved the image to the temp
                 // file
-                File fi = new File(Collect.TMPFILE_PATH);
-                String instanceFolder = formController.getInstancePath()
-                        .getParent();
+
+
+                /*
+                final Uri myUri = Uri.parse(Collect.TMPFILE_PATH);
+                showDialog(SAVING_IMAGE_DIALOG);
+                Runnable runnable1 = new Runnable() {
+                    @Override
+                    public void run() {
+                        saveChosenImage(myUri);
+                    }
+                };
+                new Thread(runnable1).start();
+                */
+                //saveCapturedImage();
+
+                String instanceFolder = Collect.getInstance().getFormController().getInstancePath()
+                        .getParent();//formController.getInstancePath().getParent();
                 String s = instanceFolder + File.separator
                         + System.currentTimeMillis() + ".jpg";
 
+                File fi = new File(Collect.TMPFILE_PATH);
                 File nf = new File(s);
+
                 if (!fi.renameTo(nf)) {
                     Timber.e("Failed to rename %s", fi.getAbsolutePath());
                 } else {
@@ -781,6 +800,42 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
         refreshCurrentView();
     }
 
+    /**I created this method from the one below because the "take picture" code wasnt
+     * saving the image to the instance folder and showing it in the view */
+
+    private void saveCapturedImage() {
+        // Copy file to sdcard
+        String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
+                .getParent();
+        String destImagePath = instanceFolder1 + File.separator
+                + System.currentTimeMillis() + ".jpg";
+
+        File tempImage = new File(Collect.TMPFILE_PATH);
+        if (tempImage != null) {
+            final File newImage = new File(destImagePath);
+            FileUtils.copyFile(tempImage, newImage);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    ((ODKView) currentView).setBinaryData(newImage);
+                    saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                    refreshCurrentView();
+                }
+            });
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dismissDialog(SAVING_IMAGE_DIALOG);
+                    Timber.e("Could not receive captured image");
+                    showCustomToast(getString(R.string.error_occured), Toast.LENGTH_SHORT);
+                }
+            });
+        }
+
+    }
+
     private void saveChosenImage(Uri selectedImage) {
         // Copy file to sdcard
         String instanceFolder1 = Collect.getInstance().getFormController().getInstancePath()
@@ -794,6 +849,8 @@ public class FormEntryActivity extends AppCompatActivity implements AnimationLis
             if (chosenImage != null) {
                 final File newImage = new File(destImagePath);
                 FileUtils.copyFile(chosenImage, newImage);
+                Log.d("MyApp","I am here");
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

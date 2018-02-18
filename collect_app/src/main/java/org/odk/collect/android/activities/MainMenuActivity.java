@@ -29,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -119,11 +120,13 @@ public class MainMenuActivity extends AppCompatActivity {
                         .logAction(this, "fillBlankForm", "click");
                 Intent i = new Intent(getApplicationContext(),
                         FormChooserList.class);
+                Log.d("ODK","Opening forms list");
                 startActivity(i);
             }
         });
 
         // review data button. expects a result.
+
         reviewDataButton = (Button) findViewById(R.id.review_data);
         reviewDataButton.setText(getString(R.string.review_data_button));
         reviewDataButton.setOnClickListener(new OnClickListener() {
@@ -137,6 +140,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        reviewDataButton.setVisibility(View.GONE);
 
         // send data button. expects a result.
         sendDataButton = (Button) findViewById(R.id.send_data);
@@ -330,10 +334,10 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         } else {
             if (reviewDataButton != null) {
-                reviewDataButton.setVisibility(View.VISIBLE);
+                reviewDataButton.setVisibility(View.GONE);
             }
             if (reviewSpacer != null) {
-                reviewSpacer.setVisibility(View.VISIBLE);
+                reviewSpacer.setVisibility(View.GONE);
             }
         }
 

@@ -107,7 +107,9 @@ public class SplashScreenActivity extends Activity {
             editor.commit();
             startSplashScreen(splashPath);
         } else {
-            endSplashScreen();
+            /* I like the splash screen so lets have it show up anyway! */
+            startSplashScreen(splashPath);
+            //endSplashScreen();
         }
 
     }

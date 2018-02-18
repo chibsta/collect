@@ -6,16 +6,16 @@
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:fadeScrollbars">false</item>
-        <item name="android:buttonStyle">@style/CustomButtonStyle</item>
+       <item name="android:buttonStyle">@style/CustomButtonStyle</item>
         <item name="colorAccent">@color/tintColor</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="searchViewStyle">@style/SearchViewTheme</item>
     </style>
 
-    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
+    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
-    </style>
+    </style> -->
 </resources>
